@@ -27,6 +27,7 @@ socket.on("room-emit", async (data) => {
 
 const sendMsg = async (chat) => {
     // encrypt here
+    window.versions.encrypt(chat)
     socket.emit("room-msg", {
         msg: chat,
         room: connectedRoom.value,

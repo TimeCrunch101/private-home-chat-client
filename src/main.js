@@ -71,51 +71,45 @@ const notify = (title, body) => {
 }
 
 app.whenReady().then(() => {
-  rsa.initialize().then(() => {
-    createWindow();
-    ipcMain.handle("notify", (event, title, body) => {
-      if (!mainWindow.isFocused()) {
-        notify(title, body)
-      }
-    })
-  
-    ipcMain.handle("encrypt", (event, msg) => {
-      const encryptedMsg = rsa.encrypt(msg)
-      console.log(encryptedMsg)
-      return "testing123"
-    })
-    
-    const icon = nativeImage.createFromPath(join(__dirname,"icon.png"))
-    tray = new Tray(icon)
-    const contextMenu = Menu.buildFromTemplate([
-      { 
-        label: 'Quit',
-        click: () => {
-          closeApp = true
-          handleQuit()
-        }
-      },
-      { 
-        label: 'Show Window',
-        click: () => {
-          mainWindow.show()
-        }
-      },
-    ])
-    tray.setToolTip('Home Chat')
-    tray.setTitle('Home Chat')
-    tray.setContextMenu(contextMenu)
-    tray.addListener("click", () => mainWindow.show())
-    app.on('activate', () => {
-      if (BrowserWindow.getAllWindows().length === 0) {
-        createWindow();
-      }
-    });
-  }).catch((err) => {
-    console.error(err)
-    app.quit()
+  createWindow();
+  ipcMain.handle("notify", (event, title, body) => {
+    if (!mainWindow.isFocused()) {
+      notify(title, body)
+    }
   })
 
+  ipcMain.handle("encrypt", (event, msg) => {
+    const encryptedMsg = rsa.encryptOwn(msg)
+    console.log(encryptedMsg)
+    return "testing123"
+  })
+  
+  const icon = nativeImage.createFromPath(join(__dirname,"icon.png"))
+  tray = new Tray(icon)
+  const contextMenu = Menu.buildFromTemplate([
+    { 
+      label: 'Quit',
+      click: () => {
+        closeApp = true
+        handleQuit()
+      }
+    },
+    { 
+      label: 'Show Window',
+      click: () => {
+        mainWindow.show()
+      }
+    },
+  ])
+  tray.setToolTip('Home Chat')
+  tray.setTitle('Home Chat')
+  tray.setContextMenu(contextMenu)
+  tray.addListener("click", () => mainWindow.show())
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow();
+    }
+  });
 });
 
 app.on('window-all-closed', () => {

@@ -1,69 +1,97 @@
 import NodeRSA from "node-rsa";
 import fs from "node:fs/promises";
+import keytar from "keytar";
+import crypto from "crypto";
+import os from "os";
+
+
 
 export class HomeRSA {
-    constructor() {
-        this.key = new NodeRSA({ b: 512 });
+    constructor(bitLength) {
+        this.bitLength = bitLength
+        this.key = null;
         this.ready = false;
-    }
-
-    async initialize() {
-        try {
-            const keysExist = await this.checkIfKeypairExists();
-            if (keysExist) {
-                console.info("RSA Keys Exist, importing...");
-                await this.importKeys();
+        this.checkStore().then((exists) => {
+            if (exists) {
+                this.ready = true;
+                console.info("Keys Exist..")
             } else {
-                console.warn("RSA Keys not found, generating new keys...");
-                await this.generateAndSaveKeys();
+                console.info("Generating new key pairs..")
+                this.generateKeyPair().then((res) => {
+                    console.log("New keypair created")
+                }).catch((err) => {
+                    throw err;
+                })
             }
-            this.ready = true;
-        } catch (err) {
-            console.error("Error during initialization:", err.message);
-        }
+        })
     }
-
-    async checkIfKeypairExists() {
-        try {
-            await fs.access("./priv.pem", fs.constants.R_OK);
-            await fs.access("./pub.pem", fs.constants.R_OK);
-            return true;
-        } catch {
+    async checkStore() {
+        const privatekey = await keytar.getPassword("home-chat", "privatekey");
+        const publickey = await keytar.getPassword("home-chat", "publickey");
+        if (privatekey === null || publickey === null) {
             return false;
+        } else {
+            const key = new NodeRSA()
+            key.importKey(privatekey)
+            key.importKey(publickey)
+            this.key = key
+            return true;
         }
     }
 
-    async importKeys() {
-        const priv = await fs.readFile("./priv.pem", { encoding: "utf8" });
-        const pub = await fs.readFile("./pub.pem", { encoding: "utf8" });
-        this.key.importKey(priv, "pkcs1-private-pem");
-        this.key.importKey(pub, "pkcs1-public-pem");
+    async generateKeyPair() {
+        const key = new NodeRSA({b: this.bitLength});
+        await keytar.setPassword("home-chat", "privatekey", key.exportKey("private"))
+        await keytar.setPassword("home-chat", "publickey", key.exportKey("public"))
+        this.key = key
+        return;
     }
 
-    async generateAndSaveKeys() {
-        this.key.generateKeyPair();
-        const priv = this.key.exportKey("pkcs1-private-pem");
-        const pub = this.key.exportKey("pkcs1-public-pem");
-        await fs.writeFile("/priv.pem", priv, { encoding: "utf8" });
-        await fs.writeFile("/pub.pem", pub, { encoding: "utf8" });
+    exportPublicKey() {
+        const pub = this.key.exportKey("public");
+        return pub;
     }
 
-    encrypt(msg) {
-        if (!this.ready) {
-            throw new Error("Keys are not ready. Please wait until initialization completes.");
+    encryptOwn(data) {
+        try {
+            const encrypted = this.key.encrypt(data, "base64")
+            return encrypted;
+        } catch (error) {
+            console.error(error)
+            return null;
         }
-        return this.key.encrypt(msg, "base64");
     }
 
-    decrypt(msg) {
-        if (!this.ready) {
-            throw new Error("Keys are not ready. Please wait until initialization completes.");
+    decryptOwn(data) {
+        try {
+            const decrypted = this.key.decrypt(data, "utf8")
+            return decrypted;
+        } catch (error) {
+            console.error(error)
+            return null;
         }
-        return this.key.decrypt(msg, "utf8");
     }
+
+    encrypt(recieverPublicKey, data) {
+        try {
+            const encryptedData = recieverPublicKey.encrypt(data, "base64")
+            return encryptedData;
+        } catch (error) {
+            console.error(error)
+            return null;
+        }
+    }
+
+    decrypt(senderData) {
+        try {
+            const decrypted = this.key.decrypt(senderData, "utf8")
+            return decrypted
+        } catch (error) {
+            console.error(error)
+            return null;
+        }
+    }
+
 }
 
-// const test = new HomeRSA()
-// await test.initialize()
-
-
+// await keytar.setPassword("test", "account", "securepassword")
