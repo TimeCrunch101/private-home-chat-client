@@ -2,8 +2,10 @@ import { app, BrowserWindow, Tray, Menu, nativeImage, Notification, ipcMain } fr
 import { join } from 'node:path';
 import { updateElectronApp } from 'update-electron-app';
 import { HomeRSA } from "./server/rsa.js";
+import { forceQuitTor } from './server/tor.js';
 const rsa = new HomeRSA()
 
+let isQuitting = false;
 
 let mainWindow = null
 let closeApp = null
@@ -111,6 +113,22 @@ app.whenReady().then(() => {
     }
   });
 });
+
+app.on("before-quit", async (event) => {
+  if (!isQuitting) {
+    event.preventDefault();
+    try {
+      console.log("Force quitting the Tor process...");
+      await forceQuitTor();
+    } catch (error) {
+      console.error("Failed to quit Tor process:", error);
+    } finally {
+      isQuitting = true;
+      app.quit();
+    }
+  }
+});
+
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

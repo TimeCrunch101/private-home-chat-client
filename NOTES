@@ -1,0 +1,35 @@
+TOR OUTPUT
+
+Nov 28 12:00:05.821 [notice] Tor 0.4.8.13 (git-e153e72c01315f86) running on Linux with Libevent 2.1.12-stable, OpenSSL 3.0.2, Zlib 1.2.11, Liblzma N/A, Libzstd N/A and Glibc 2.35 as libc.
+Nov 28 12:00:05.821 [notice] Tor can't help you if you use it wrong! Learn how to be safe at https://support.torproject.org/faq/staying-anonymous/
+Nov 28 12:00:05.821 [notice] Configuration file "/var/tmp/dist/tor/etc/tor/torrc" not present, using reasonable defaults.
+Nov 28 12:00:05.822 [notice] Opening Socks listener on 127.0.0.1:9050
+Nov 28 12:00:05.822 [notice] Opened Socks listener connection (ready) on 127.0.0.1:9050
+Nov 28 12:00:05.000 [notice] Bootstrapped 0% (starting): Starting
+Nov 28 12:00:05.000 [notice] Starting with guard context "default"
+Nov 28 12:00:06.000 [notice] Bootstrapped 5% (conn): Connecting to a relay
+Nov 28 12:00:07.000 [notice] Bootstrapped 10% (conn_done): Connected to a relay
+Nov 28 12:00:07.000 [notice] Bootstrapped 14% (handshake): Handshaking with a relay
+Nov 28 12:00:07.000 [notice] Bootstrapped 15% (handshake_done): Handshake with a relay done
+Nov 28 12:00:07.000 [notice] Bootstrapped 20% (onehop_create): Establishing an encrypted directory connection
+Nov 28 12:00:07.000 [notice] Bootstrapped 25% (requesting_status): Asking for networkstatus consensus
+Nov 28 12:00:08.000 [notice] Bootstrapped 30% (loading_status): Loading networkstatus consensus
+Nov 28 12:00:08.000 [notice] I learned some more directory information, but not enough to build a circuit: We have no usable consensus.
+Nov 28 12:00:09.000 [notice] Bootstrapped 40% (loading_keys): Loading authority key certs
+Nov 28 12:00:09.000 [notice] The current consensus has no exit nodes. Tor can only build internal paths, such as paths to onion services.
+Nov 28 12:00:09.000 [notice] Bootstrapped 45% (requesting_descriptors): Asking for relay descriptors
+Nov 28 12:00:09.000 [notice] I learned some more directory information, but not enough to build a circuit: We need more microdescriptors: we have 0/7961, and can only build 0% of likely paths. (We have 0% of guards bw, 0% of midpoint bw, and 0% of end bw (no exits in consensus, using mid) = 0% of path bw.)
+Nov 28 12:00:10.000 [notice] Bootstrapped 50% (loading_descriptors): Loading relay descriptors
+Nov 28 12:00:12.000 [notice] The current consensus contains exit nodes. Tor can build exit and internal paths.
+Nov 28 12:00:13.000 [notice] Bootstrapped 56% (loading_descriptors): Loading relay descriptors
+Nov 28 12:00:13.000 [notice] Bootstrapped 62% (loading_descriptors): Loading relay descriptors
+Nov 28 12:00:13.000 [notice] Bootstrapped 70% (loading_descriptors): Loading relay descriptors
+Nov 28 12:00:13.000 [notice] Bootstrapped 75% (enough_dirinfo): Loaded enough directory info to build circuits
+Nov 28 12:00:13.000 [notice] Bootstrapped 90% (ap_handshake_done): Handshake finished with a relay to build circuits
+Nov 28 12:00:13.000 [notice] Bootstrapped 95% (circuit_create): Establishing a Tor circuit
+Nov 28 12:00:14.000 [notice] Bootstrapped 100% (done): Done
+
+
+
+sudo kill -9 $(sudo lsof -t -i:9050)
+sudo ss -tuln | grep 9050
