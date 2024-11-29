@@ -83,7 +83,7 @@ app.whenReady().then(() => {
   ipcMain.handle("encrypt", (event, msg) => {
     const encryptedMsg = rsa.encryptOwn(msg)
     console.log(encryptedMsg)
-    return "testing123"
+    return encryptedMsg
   })
   
   const icon = nativeImage.createFromPath(join(__dirname,"icon.png"))
