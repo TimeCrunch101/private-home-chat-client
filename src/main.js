@@ -119,7 +119,7 @@ app.on("before-quit", async (event) => {
     event.preventDefault();
     try {
       console.log("Force quitting the Tor process...");
-      await forceQuitTor();
+      forceQuitTor();
     } catch (error) {
       console.error("Failed to quit Tor process:", error);
     } finally {

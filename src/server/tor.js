@@ -1,13 +1,26 @@
-import axios from "axios";
+import { spawn } from 'node:child_process';
 import { SocksProxyAgent } from "socks-proxy-agent";
-import { execFile } from "node:child_process";
- 
+import axios from "axios"
+
 const proxy = 'socks5h://127.0.0.1:9050';
 const agent = new SocksProxyAgent(proxy);
+// FIXME: Add correct path..
+const tor = "/home/aaron/GITHUB/testing/resources/tor/linux/tor/tor"
 
-const torBinary = "/home/aaron/GITHUB/private-home-chat-client/resources/tor/linux/tor/tor";
+const torProcess = spawn(tor, []);
 
-const checkTor = () => {
+
+torProcess.stdout.on('data', (data) => {
+  console.log(`stdout: ${data}`);
+});
+torProcess.stderr.on('data', (data) => {
+  console.error(`stderr: ${data}`);
+});
+torProcess.on('close', (code) => {
+  console.log(`child process exited with code ${code}`);
+});
+
+export const checkTor = () => {
     axios.get('http://check.torproject.org', { httpAgent: agent, httpsAgent: agent }).then((response) => {
         if (response.data.includes('Congratulations')) {
             console.log('Successfully connected through Tor!');
@@ -20,37 +33,9 @@ const checkTor = () => {
 
 }
 
-// const torProcess = execFile(torBinary, (error, stdout, stderr) => {
-//     if (error) {
-//       console.error('Failed to start Tor:', error);
-//       return;
-//     }
-//     console.log('Tor started successfully');
-//     console.log(stdout);
-//     console.error(stderr);
-//   }
-// );
-
-const torProcess = execFile(torBinary)
-
-// Handle process exit
-// torProcess.on('exit', (code) => {
-//   console.log(`Tor process exited with code ${code}`);
-// });
-
-// Function to force quit the Tor process
 export const forceQuitTor = () => {
-  return new Promise((resolve, reject) => {
     if (torProcess) {
-      console.log('Force quitting the Tor process...');
-      torProcess.kill('SIGKILL');
-      resolve(true)
+        torProcess.kill("SIGTERM")
     }
-    resolve(null)    
-  })
+    return null
 }
-
-
-// setTimeout(() => {
-//   checkTor()
-// }, 3000);
