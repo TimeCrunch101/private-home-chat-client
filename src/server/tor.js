@@ -39,3 +39,8 @@ export const forceQuitTor = () => {
     }
     return null
 }
+
+
+setTimeout(() => {
+    checkTor()
+}, 5000);
