@@ -1,14 +1,7 @@
 <script setup>
-import ChatBox from "../components/ChatBox.vue"
 
 </script>
 
 <template>
-
-<ChatBox />
-
+    <h1>Main View</h1>
 </template>
-
-<style scoped>
-
-</style>

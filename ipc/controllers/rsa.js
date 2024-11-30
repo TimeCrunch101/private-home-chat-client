@@ -1,6 +1,6 @@
 import NodeRSA from "node-rsa";
-// import fs from "node:fs/promises";
 import keytar from "keytar";
+import { sendMessageToRenderer } from "../../src/hoistMessage.js"
 // import crypto from "crypto";
 // import os from "os";
 
@@ -14,7 +14,8 @@ export class HomeRSA {
         this.checkStore().then((exists) => {
             if (exists) {
                 this.ready = true;
-                console.info("Keys Exist..")
+                sendMessageToRenderer("message", "Keypair Exists...")
+                console.info("Keypair Exists...")
             } else {
                 console.info("Generating new key pairs..")
                 this.generateKeyPair().then((res) => {

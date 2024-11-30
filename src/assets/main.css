@@ -1,3 +1,7 @@
+@import url("./chat-frame.css");
+@import url("./chat-input.css");
+@import url("./nav-bar.css");
+
 * {
     margin: 0px;
 }
@@ -6,6 +10,29 @@ body {
     background-color: #030e14;
 }
 
-p,h1,h2,h3,h4,h5,li {
+p,h1,h2,h3,h4,h5,li,span,a {
     color: #4ee94e;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 25% 1fr;
+}
+
+.window {
+    border-bottom: 2px solid rgb(4, 34, 6);
+    padding-left: 3px;
+    max-height: calc(100vh - 2em);
+    overflow-y: auto;
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #222f52;
+}
+::-webkit-scrollbar-thumb {
+    background: #1c8f80;
 }

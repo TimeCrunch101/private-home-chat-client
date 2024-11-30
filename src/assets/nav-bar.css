@@ -1,0 +1,28 @@
+.nav-bar {
+    height: calc(100vh - 2em);
+    border-right: 2px solid rgb(65, 97, 17);
+    border-bottom: 2px solid rgb(4, 34, 6);
+}
+
+a {
+    text-decoration: none;
+}
+
+.nav-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    padding-left: 1em;
+    margin-top: 2em;
+    gap: 2em;
+}
+
+.nav-list-item {
+    width: 100%;
+    font-size: 1.5rem;
+}
+
+.nav-list-item:hover,a:hover {
+    cursor: pointer;
+    color: rgb(0, 255, 255);
+}

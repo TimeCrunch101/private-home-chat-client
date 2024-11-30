@@ -1,0 +1,30 @@
+.chat-window {
+    height: calc(100vh - 11.5em);
+    overflow-y: auto;
+}
+
+.chat-message-wrapper {
+    font-size: 1.2em;
+    color: #4ee94e;
+}
+
+.chat-message {
+    width: max-content;
+    max-width: 325px;
+    overflow: auto;
+    border: 1px solid rgba(0, 255, 191, 0.438);
+    margin-bottom: 5px;
+    padding: 6px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
+.self {
+    justify-self: end;
+    margin-right: 5px;
+}
+
+#chat-date {
+    color: rgb(243, 156, 156);
+}

@@ -2,8 +2,10 @@ import { app, BrowserWindow, Tray, Menu, nativeImage, Notification, ipcMain } fr
 import { join } from 'node:path';
 import { updateElectronApp } from 'update-electron-app';
 import { HomeRSA } from "../ipc/controllers/rsa.js";
-import { forceQuitTor } from '../ipc/controllers/tor.js';
-const rsa = new HomeRSA()
+import { forceQuitTor, startupTor } from '../ipc/controllers/tor.js';
+import { setMainWindow } from './hoistMessage.js';
+
+let rsa = null;
 
 let isQuitting = false;
 
@@ -31,13 +33,15 @@ if (process.env.NODE_ENV !== 'development') {
 
 const createWindow = () => {
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1300,
+    height: 750,
     icon: "./public/icon.ico",
     webPreferences: {
       preload: join(__dirname, 'preload.js'),
     },
   });
+
+  setMainWindow(mainWindow)
 
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
@@ -57,6 +61,13 @@ const createWindow = () => {
       app.quit()
     }
   })
+
+  mainWindow.once("ready-to-show", () => {
+    startupTor()
+    rsa = new HomeRSA()
+  })
+  
+  mainWindow.maximize()
 };
 
 const handleQuit = () => {

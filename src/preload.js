@@ -5,5 +5,7 @@ import { contextBridge, ipcRenderer } from 'electron'
 
 contextBridge.exposeInMainWorld('versions', {
   notify: (title, body) => ipcRenderer.invoke('notify',title, body),
-  encrypt: (msg) => ipcRenderer.invoke("encrypt", msg)
+  encrypt: (msg) => ipcRenderer.invoke("encrypt", msg),
+  
+  onMessage: (callback) => ipcRenderer.on('message', (event, data) => callback(data))
 })

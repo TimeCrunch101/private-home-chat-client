@@ -1,0 +1,16 @@
+#user-input {
+    resize: none;
+    border: 2px solid rgb(6, 122, 113);
+    font-size: large;
+    background-color: #191f19;
+    color: white;
+
+    /* width: 100%; */
+}
+
+.group {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    bottom: 1.5em;
+}
