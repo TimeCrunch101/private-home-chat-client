@@ -1,8 +1,8 @@
 import { app, BrowserWindow, Tray, Menu, nativeImage, Notification, ipcMain } from 'electron';
 import { join } from 'node:path';
 import { updateElectronApp } from 'update-electron-app';
-import { HomeRSA } from "./server/rsa.js";
-import { forceQuitTor } from './server/tor.js';
+import { HomeRSA } from "../server/rsa.js";
+import { forceQuitTor } from '../server/tor.js';
 const rsa = new HomeRSA()
 
 let isQuitting = false;

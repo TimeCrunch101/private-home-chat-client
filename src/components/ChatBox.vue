@@ -87,14 +87,19 @@ const sendMessage = async () => {
 }
 
 .chat-message {
-    display: flex;
+    /* display: flex; */
     width: max-content;
     max-width: 325px;
     overflow: auto;
-    border: 1px solid rgb(0, 255, 191);
-    /* border-radius: .5em; */
+    border: 1px solid rgba(0, 255, 191, 0.438);
     margin-bottom: 1.5em;
     padding: 6px;
+
+
+    word-wrap: break-word; /* Break long words */
+    overflow-wrap: break-word; /* For additional browser support */
+    white-space: normal; /* Ensure text wraps */
+
 
 }
 
