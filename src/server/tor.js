@@ -5,7 +5,7 @@ import axios from "axios"
 const proxy = 'socks5h://127.0.0.1:9050';
 const agent = new SocksProxyAgent(proxy);
 // FIXME: Add correct path..
-const tor = "/home/aaron/GITHUB/testing/resources/tor/linux/tor/tor"
+const tor = "/home/aaron/GITHUB/private-home-chat-client/resources/tor/linux/tor/tor"
 
 const torProcess = spawn(tor, []);
 
