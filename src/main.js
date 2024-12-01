@@ -2,7 +2,7 @@ import { app, BrowserWindow, Tray, Menu, nativeImage, Notification, ipcMain } fr
 import { join } from 'node:path';
 import { updateElectronApp } from 'update-electron-app';
 import { HomeRSA } from "../ipc/controllers/rsa.js";
-import { forceQuitTor, startupTor } from '../ipc/controllers/tor.js';
+import { forceQuitTor, startupTor, checkTor } from '../ipc/controllers/tor.js';
 import { setMainWindow } from './hoistMessage.js';
 
 let rsa = null;
@@ -63,10 +63,14 @@ const createWindow = () => {
   })
 
   mainWindow.once("ready-to-show", () => {
-    startupTor()
-    rsa = new HomeRSA()
+    startupTor((cb) => {
+      if (cb) {
+        console.info("Checking Tor Connection...")
+        checkTor()
+        rsa = new HomeRSA()
+      }
+    })
   })
-  
   mainWindow.maximize()
 };
 

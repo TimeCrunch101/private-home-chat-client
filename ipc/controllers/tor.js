@@ -10,10 +10,13 @@ const tor = "/home/aaron/GITHUB/private-home-chat-client/resources/tor/linux/tor
 
 let torProcess = null;
 
-export const startupTor = () => {
+export const startupTor = (cb) => {
     torProcess = spawn(tor, []);
     torProcess.stdout.on('data', (data) => {
         sendMessageToRenderer("message", data.toString())
+        if (data.toString().includes("Bootstrapped 100% (done): Done")) {
+            return cb(true)
+        }
       console.log(`stdout: ${data}`);
     });
     torProcess.stderr.on('data', (data) => {
@@ -46,8 +49,3 @@ export const forceQuitTor = () => {
     }
     return null
 }
-
-
-setTimeout(() => {
-    checkTor()
-}, 5000);

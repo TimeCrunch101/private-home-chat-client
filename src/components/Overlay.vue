@@ -1,9 +1,13 @@
 <script setup>
 import { ref } from "vue";
+import { useUtilStore } from "../stores/utils.js"
 
+const utils = useUtilStore()
 const content = ref([])
-const display = ref(true);
+const display = ref(utils.getOverlayState);
 const showClose = ref(false)
+
+console.log("PAGE LOAD STATE: ", display.value)
 
 window.versions.onMessage((data) => {
     content.value.push(data)
@@ -16,8 +20,12 @@ window.versions.onMessage((data) => {
 });
 
 const closeModal = () => {
+    utils.setOverlayState(false)
     display.value = false
+    console.log("GOT FROM STORE AFTER UDPATE ", utils.getOverlayState)
 }
+
+// localStorage.setItem("myCat", "Tom");
 
 </script>
 
