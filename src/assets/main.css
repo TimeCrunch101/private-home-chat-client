@@ -36,3 +36,11 @@ p,h1,h2,h3,h4,h5,li,span,a {
 ::-webkit-scrollbar-thumb {
     background: #1c8f80;
 }
+
+
+.btn {
+    background-color: black;
+    color: #4ee94e;
+    border: 2px solid #4ee94e;
+    font-size: larger;
+}
