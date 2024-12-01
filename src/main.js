@@ -4,6 +4,7 @@ import { updateElectronApp } from 'update-electron-app';
 import { HomeRSA } from "../ipc/controllers/rsa.js";
 import { forceQuitTor, startupTor, checkTor } from '../ipc/controllers/tor.js';
 import { setMainWindow } from './hoistMessage.js';
+import "../ipc/controllers/dbController.js"
 
 let rsa = null;
 
