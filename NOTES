@@ -33,3 +33,6 @@ Nov 28 12:00:14.000 [notice] Bootstrapped 100% (done): Done
 
 sudo kill -9 $(sudo lsof -t -i:9050)
 sudo ss -tuln | grep 9050
+
+
+Check tor connection >> check RSA keys... >> finalize

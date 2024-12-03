@@ -91,3 +91,6 @@ typings/
 # Electron-Forge
 out/
 *.pem
+*.db
+*.db-shm
+*.db-wal
