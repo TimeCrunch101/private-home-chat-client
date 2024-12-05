@@ -64,15 +64,16 @@ const createWindow = () => {
   })
 
   mainWindow.once("ready-to-show", () => {
-    startupTor((cb) => {
-      if (cb) {
-        console.info("Checking Tor Connection...")
-        checkTor()
-        rsa = new HomeRSA()
-      }
-    })
+    // startupTor((cb) => {
+    //   if (cb) {
+    //     console.info("Checking Tor Connection...")
+    //     checkTor()
+    //     rsa = new HomeRSA()
+    //   }
+    // })
   })
   mainWindow.maximize()
+  rsa = new HomeRSA() // FIXME: Remove when have internet
 };
 
 const handleQuit = () => {

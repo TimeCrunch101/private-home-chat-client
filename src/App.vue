@@ -9,7 +9,7 @@ router.push('/')
 </script>
 
 <template>
-    <overlay />
+    <!-- <overlay /> -->
     <p>Version: 0.2.11</p>
     <div class="container">
         <NavBar />
