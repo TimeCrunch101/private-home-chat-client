@@ -1,7 +1,7 @@
 <script setup>
 import {useRouter} from "vue-router"
 import NavBar from "./components/NavBar.vue"
-import overlay from "./components/Overlay.vue"
+import Overlay from "./components/Overlay.vue"
 
 const router = useRouter()
 router.push('/')
@@ -9,7 +9,7 @@ router.push('/')
 </script>
 
 <template>
-    <!-- <overlay /> -->
+    <Overlay />
     <p>Version: 0.2.11</p>
     <div class="container">
         <NavBar />

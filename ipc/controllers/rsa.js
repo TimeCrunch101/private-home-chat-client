@@ -1,8 +1,6 @@
 import NodeRSA from "node-rsa";
 import keytar from "keytar";
-import { sendMessageToRenderer } from "../../src/hoistMessage.js"
-// import crypto from "crypto";
-// import os from "os";
+import { sendMessageToRenderer } from "../utils/hoistMessage.js"
 
 
 
@@ -18,7 +16,7 @@ export class HomeRSA {
                 console.info("Keypair Exists...")
             } else {
                 console.info("Generating new key pairs..")
-                this.generateKeyPair().then((res) => {
+                this.generateKeyPair().then(() => {
                     console.log("New keypair created")
                 }).catch((err) => {
                     throw err;
@@ -41,7 +39,7 @@ export class HomeRSA {
     }
 
     async generateKeyPair() {
-        const key = new NodeRSA({b: this.bitLength});
+        const key = new NodeRSA({ b: this.bitLength });
         await keytar.setPassword("home-chat", "privatekey", key.exportKey("private"))
         await keytar.setPassword("home-chat", "publickey", key.exportKey("public"))
         this.key = key

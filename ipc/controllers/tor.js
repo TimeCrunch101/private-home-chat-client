@@ -1,12 +1,12 @@
 import { spawn } from 'node:child_process';
 import { SocksProxyAgent } from "socks-proxy-agent";
 import axios from "axios"
-import { sendMessageToRenderer } from "../../src/hoistMessage.js"
+import { sendMessageToRenderer } from "../utils/hoistMessage.js"
 
 const proxy = 'socks5h://127.0.0.1:9050';
 const agent = new SocksProxyAgent(proxy);
 // FIXME: Add correct path..
-const tor = "/home/aaron/GITHUB/private-home-chat-client/resources/tor/linux/tor/tor"
+const tor = "C:\\Users\\aallen\\GITHUB\\private-home-chat-client\\resources\\tor\\windows\\tor\\tor.exe"
 
 let torProcess = null;
 
@@ -17,13 +17,13 @@ export const startupTor = (cb) => {
         if (data.toString().includes("Bootstrapped 100% (done): Done")) {
             return cb(true)
         }
-      console.log(`stdout: ${data}`);
     });
     torProcess.stderr.on('data', (data) => {
-      console.error(`stderr: ${data}`);
+        console.error(`stderr: ${data}`);
+        return cb(false)
     });
     torProcess.on('close', (code) => {
-      console.log(`child process exited with code ${code}`);
+        console.log(`Tor process exited with code ${code}`);
     });
 }
 
@@ -33,7 +33,7 @@ export const checkTor = () => {
     axios.get('http://check.torproject.org', { httpAgent: agent, httpsAgent: agent }).then((response) => {
         if (response.data.includes('Congratulations')) {
             console.log('Successfully connected through Tor!');
-            sendMessageToRenderer("message", "Connected to tor...")
+            sendMessageToRenderer("message", "CONNECTED!")
         } else {
             console.log('Not connected to Tor.');
         }

@@ -1,21 +1,17 @@
-import { app, BrowserWindow, Tray, Menu, nativeImage, Notification, ipcMain } from 'electron';
+import { app, BrowserWindow, Tray, Menu, nativeImage } from 'electron';
 import { join } from 'node:path';
 import { updateElectronApp } from 'update-electron-app';
-import { HomeRSA } from "../ipc/controllers/rsa.js";
 import { forceQuitTor, startupTor, checkTor } from '../ipc/controllers/tor.js';
-import { setMainWindow } from './hoistMessage.js';
+import { setMainWindow } from '../ipc/utils/hoistMessage.js';
+import { setupHandlers } from "../ipc/ipcHandlers.js"
 import "../ipc/controllers/dbController.js"
 
-let rsa = null;
-
 let isQuitting = false;
-
 let mainWindow = null
 let closeApp = null
 let tray = null
 
 if (process.env.NODE_ENV !== 'development') {
-  console.log("ENVIRONMENT: ",process.env.NODE_ENV)
   if (require('electron-squirrel-startup')) {
     app.quit();
   }
@@ -53,7 +49,7 @@ const createWindow = () => {
   if (!app.isPackaged) {
     mainWindow.webContents.openDevTools();
   }
-  
+
   mainWindow.on("close", (event) => {
     if (!closeApp) {
       event.preventDefault()
@@ -64,56 +60,34 @@ const createWindow = () => {
   })
 
   mainWindow.once("ready-to-show", () => {
-    // startupTor((cb) => {
-    //   if (cb) {
-    //     console.info("Checking Tor Connection...")
-    //     checkTor()
-    //     rsa = new HomeRSA()
-    //   }
-    // })
+    startupTor((cb) => {
+      if (cb) {
+        console.info("Checking Tor Connection...")
+        checkTor()
+      }
+    })
   })
+
   mainWindow.maximize()
-  rsa = new HomeRSA() // FIXME: Remove when have internet
+
 };
-
-const handleQuit = () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
-}
-
-const notify = (title, body) => {
-  new Notification({
-    title: title,
-    body: body
-  }).show()
-}
 
 app.whenReady().then(() => {
   createWindow();
-  ipcMain.handle("notify", (event, title, body) => {
-    if (!mainWindow.isFocused()) {
-      notify(title, body)
-    }
-  })
-
-  ipcMain.handle("encrypt", (event, msg) => {
-    const encryptedMsg = rsa.encryptOwn(msg)
-    console.log(encryptedMsg)
-    return encryptedMsg
-  })
-  
-  const icon = nativeImage.createFromPath(join(__dirname,"icon.png"))
+  setupHandlers(mainWindow);
+  const icon = nativeImage.createFromPath(join(__dirname, "icon.png"))
   tray = new Tray(icon)
   const contextMenu = Menu.buildFromTemplate([
-    { 
+    {
       label: 'Quit',
       click: () => {
         closeApp = true
-        handleQuit()
+        if (process.platform !== 'darwin') {
+          app.quit();
+        }
       }
     },
-    { 
+    {
       label: 'Show Window',
       click: () => {
         mainWindow.show()
@@ -145,7 +119,6 @@ app.on("before-quit", async (event) => {
     }
   }
 });
-
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

@@ -1,10 +1,10 @@
 let mainWindow;
 
-export function setMainWindow(window) {
+export const setMainWindow = (window) => {
     mainWindow = window;
 }
 
-export function sendMessageToRenderer(channel, data) {
+export const sendMessageToRenderer = (channel, data) => {
     if (mainWindow) {
         mainWindow.webContents.send(channel, data);
     } else {
