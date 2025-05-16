@@ -6,7 +6,7 @@ import { sendMessageToRenderer } from "../utils/hoistMessage.js"
 const proxy = 'socks5h://127.0.0.1:9050';
 const agent = new SocksProxyAgent(proxy);
 // FIXME: Add correct path..
-const tor = "C:\\Users\\aallen\\GITHUB\\private-home-chat-client\\resources\\tor\\windows\\tor\\tor.exe"
+const tor = "C:\\Users\\aaron\\GITHUB\\private-home-chat-client\\resources\\tor\\windows\\tor\\tor.exe"
 
 let torProcess = null;
 
